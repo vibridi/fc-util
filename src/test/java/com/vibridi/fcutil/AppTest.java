@@ -6,12 +6,14 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.Arrays;
+import java.util.List;
 
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.junit.Test;
 
 import com.vibridi.fcutil.engine.FCEngine;
 import com.vibridi.fcutil.engine.XLSXReader;
+import com.vibridi.fcutil.engine.XLSXWriter;
 import com.vibridi.fcutil.exception.ValidatorException;
 import com.vibridi.fcutil.model.Player;
 import com.vibridi.fcutil.utils.AppOptions;
@@ -85,6 +87,31 @@ public class AppTest {
         engine.validateOffers();
         
         AppOptions.instance.resetDefaults();
+	}
+	
+	@Test
+	public void testComputeLists() throws URISyntaxException {
+		File f1 = new File(AppTest.class.getResource("/ListaSvincolatiShort.xlsx").toURI());
+		File f2 = new File(AppTest.class.getResource("/ListaSvincolatiShort2.xlsx").toURI());
+		File f3 = new File(AppTest.class.getResource("/ListaSvincolatiShort3.xlsx").toURI());
+		
+		XLSXReader r1 = new XLSXReader(f1);
+		XLSXReader r2 = new XLSXReader(f2);
+		XLSXReader r3 = new XLSXReader(f3);
+		
+		FCEngine engine = new FCEngine(Arrays.asList(r1,r2,r3));
+        engine.readOffers();
+        engine.computeLists();
+        
+        List<XLSXWriter> writers = engine.getWriters();
+        for(XLSXWriter w : writers) {
+        	System.out.println(w.getOwner());
+        	System.out.println("Assigned players: ");
+        	for(Player p : w.getWonPlayers()) {
+        		System.out.println("\t"+p.getName()+"\t"+p.getOfferer());
+        	}
+        }
+        
 	}
 	
 }

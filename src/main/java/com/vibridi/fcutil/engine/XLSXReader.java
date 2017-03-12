@@ -80,6 +80,10 @@ public class XLSXReader {
 		return (Player) array[index];
 	}
 	
+	public Map<String,Player> getPlayersMap() {
+		return players;
+	}
+	
 	public long countOffers() {
 		return players.values().stream()
 			.filter(player -> player.getOffer() != 0.0)
@@ -125,6 +129,7 @@ public class XLSXReader {
 	
 	private Player toPlayer(Row row) {		
 		return new Player(
+				getFileName(),
 				row.getCell(fieldIndices.get("Ruolo")).getStringCellValue(),
 				row.getCell(fieldIndices.get("Calciatore")).getStringCellValue(),
 				row.getCell(fieldIndices.get("Squadra")).getStringCellValue(),

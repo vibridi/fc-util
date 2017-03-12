@@ -5,6 +5,7 @@ import java.util.stream.Collectors;
 
 public class Player {
 
+	private String offerer;
 	private String role;
 	private String name;
 	private String team;
@@ -12,7 +13,8 @@ public class Player {
 	private double offer;
 	private boolean sold;
 	
-	public Player(String role, String name, String team, double cost, double offer) {
+	public Player(String offerer, String role, String name, String team, double cost, double offer) {
+		this.offerer = offerer;
 		this.role = role;
 		this.name = name;
 		this.team = team;
@@ -39,6 +41,10 @@ public class Player {
 	
 	private String capitalize(String s1) {
 		return Character.toString(s1.charAt(0)).toUpperCase() + s1.substring(1);
+	}
+	
+	public String getOfferer() {
+		return offerer;
 	}
 
 	public String getRole() {
