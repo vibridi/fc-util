@@ -1,8 +1,91 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.text.Font?>
 
-<BorderPane xmlns:fx="http://javafx.com/fxml/1">
-	<!-- TODO Add Nodes -->
+
+<BorderPane prefHeight="423.0" prefWidth="541.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8.0.65">
+   <center>
+      <AnchorPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+         <children>
+            <GridPane layoutX="154.0" layoutY="177.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+              <columnConstraints>
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+              </columnConstraints>
+              <rowConstraints>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+              </rowConstraints>
+               <children>
+                  <TabPane prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE">
+                    <tabs>
+                      <Tab text="Liste">
+                        <content>
+                          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                        </content>
+                      </Tab>
+                      <Tab text="Opzioni">
+                        <content>
+                          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                 <children>
+                                    <GridPane hgap="10.0" layoutX="112.0" layoutY="125.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                      <columnConstraints>
+                                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="412.0" minWidth="10.0" prefWidth="101.0" />
+                                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="473.0" minWidth="10.0" prefWidth="400.0" />
+                                      </columnConstraints>
+                                      <rowConstraints>
+                                        <RowConstraints maxHeight="35.0" minHeight="35.0" prefHeight="35.0" vgrow="SOMETIMES" />
+                                          <RowConstraints maxHeight="60.0" minHeight="40.0" prefHeight="40.0" vgrow="SOMETIMES" />
+                                          <RowConstraints maxHeight="35.0" minHeight="35.0" prefHeight="35.0" vgrow="SOMETIMES" />
+                                          <RowConstraints maxHeight="35.0" minHeight="35.0" prefHeight="35.0" vgrow="SOMETIMES" />
+                                          <RowConstraints maxHeight="337.0" minHeight="10.0" prefHeight="225.0" vgrow="SOMETIMES" />
+                                      </rowConstraints>
+                                       <children>
+                                          <Label alignment="CENTER" text="Nomi colonne:" GridPane.halignment="RIGHT" GridPane.hgrow="ALWAYS" GridPane.valignment="CENTER" GridPane.vgrow="ALWAYS">
+                                             <font>
+                                                <Font size="14.0" />
+                                             </font>
+                                          </Label>
+                                          <TextField prefHeight="27.0" prefWidth="324.0" promptText="Colonna1,Colonna2,Colonna3,..." GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.valignment="CENTER" GridPane.vgrow="NEVER" />
+                                          <Label alignment="CENTER" text="Inserisci i nomi delle colonne separati da virgole. Devi rispettare eventuali lettere maiuscole e minuscole." wrapText="true" GridPane.columnIndex="1" GridPane.rowIndex="1" GridPane.valignment="TOP">
+                                             <font>
+                                                <Font size="12.0" />
+                                             </font>
+                                          </Label>
+                                          <Label alignment="CENTER" text="Max offerte:" GridPane.halignment="RIGHT" GridPane.rowIndex="2" GridPane.valignment="CENTER">
+                                             <font>
+                                                <Font size="14.0" />
+                                             </font>
+                                          </Label>
+                                          <TextField maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="27.0" prefWidth="63.0" text="21" GridPane.columnIndex="1" GridPane.rowIndex="2" GridPane.valignment="CENTER" />
+                                          <Label alignment="CENTER" text="Budget:" GridPane.halignment="RIGHT" GridPane.rowIndex="3" GridPane.valignment="CENTER">
+                                             <font>
+                                                <Font size="14.0" />
+                                             </font>
+                                          </Label>
+                                          <TextField maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="27.0" prefWidth="63.0" text="40" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                                       </children>
+                                       <padding>
+                                          <Insets left="10.0" right="20.0" top="20.0" />
+                                       </padding>
+                                    </GridPane>
+                                 </children>
+                              </AnchorPane>
+                        </content>
+                      </Tab>
+                    </tabs>
+                  </TabPane>
+               </children>
+            </GridPane>
+         </children>
+      </AnchorPane>
+   </center>
 </BorderPane>
-

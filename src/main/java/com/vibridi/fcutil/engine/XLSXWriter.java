@@ -22,6 +22,12 @@ public class XLSXWriter {
 		return wonPlayers;
 	}
 	
+	public void prepareWorkbook() {
+		
+	}
 	
+	public void saveWorkbook() {
+		
+	}
 
 }

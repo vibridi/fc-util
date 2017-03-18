@@ -9,4 +9,5 @@ public interface IFCEngine {
 	public void validateOffers();
 	public void computeLists();
 	public void generateUnassignedPlayersList();
+	public void generateContendedPlayersList();
 }

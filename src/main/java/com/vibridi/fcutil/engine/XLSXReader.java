@@ -22,6 +22,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import com.vibridi.fcutil.exception.XLSXLoadException;
 import com.vibridi.fcutil.model.Player;
+import com.vibridi.fcutil.utils.AppOptions;
 
 public class XLSXReader {
 	
@@ -37,7 +38,7 @@ public class XLSXReader {
 
 	public XLSXReader(File xlsx) {
 		this.xlsx = xlsx;
-		this.head = new HashSet<String>(Arrays.asList("Ruolo", "Calciatore", "Squadra", "Costo Attuale", "Costo Iniziale"));
+		this.head = new HashSet<String>(Arrays.asList(AppOptions.instance.getHeaders()));
 		this.fieldIndices = new HashMap<String,Integer>();
 		this.headRow = -1;
 	}
@@ -53,7 +54,7 @@ public class XLSXReader {
 					.collect(Collectors.toMap(Player::getName, Function.identity(), (o,n) -> n, LinkedHashMap::new));
 
 			xwb.close();
-		} catch(Exception e) {
+		} catch(Throwable e) {
 			throw new XLSXLoadException(xlsx.getName(), e);
 		}
 	}
@@ -96,8 +97,12 @@ public class XLSXReader {
 			.sum();
 	}
 	
+	public boolean didFindTableHead() {
+		return headRow != -1;
+	}
+	
 	private boolean isPlayer(Row row) {
-		if(isTableHead(row)) {
+		if(headRow == -1 && isTableHead(row)) {
 			rememberTableHead(row);
 			return false;
 		}
@@ -114,8 +119,16 @@ public class XLSXReader {
 	
 	private boolean isTableHead(Row row) {
 		Cell cell = row.getCell(0);
-		if(cell.getCellTypeEnum() == CellType.STRING &&
-				head.contains(cell.getStringCellValue())) {
+		if(cell != null && cell.getCellTypeEnum() == CellType.STRING &&
+				head.contains(cell.getStringCellValue().trim())) { // possible table head
+			
+			for(int i = 0; i < row.getLastCellNum(); i++) {
+				cell = row.getCell(i);
+				if(cell == null || cell.getCellTypeEnum() != CellType.STRING || 
+						!head.contains(cell.getStringCellValue().trim()))
+					return false;	
+			}
+			
 			headRow = row.getRowNum();
 			return true;
 		}

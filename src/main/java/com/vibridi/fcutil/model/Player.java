@@ -1,6 +1,8 @@
 package com.vibridi.fcutil.model;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.stream.Collectors;
 
 public class Player {
@@ -11,7 +13,7 @@ public class Player {
 	private String team;
 	private double cost;
 	private double offer;
-	private boolean sold;
+	private List<String> contenders;
 	
 	public Player(String offerer, String role, String name, String team, double cost, double offer) {
 		this.offerer = offerer;
@@ -20,12 +22,23 @@ public class Player {
 		this.team = team;
 		this.cost = cost;
 		this.offer = offer;
-		this.setSold(false);
+		this.contenders = new ArrayList<String>();
+		this.contenders.add(offerer);
 	}
 	
 	@Override
 	public String toString() {
 		return Arrays.stream(this.getClass().getDeclaredFields())
+			.filter(field -> {
+					String name = field.getName();
+					switch(name) {
+					case "offerer":
+					case "contenders":
+						return false;
+					default:
+						return true; 
+					}
+				})
 			.map(field -> { 
 					String name = field.getName();
 					Object value;
@@ -47,6 +60,10 @@ public class Player {
 		return offerer;
 	}
 
+	public void setOfferer(String offerer) {
+		this.offerer = offerer;
+	}
+	
 	public String getRole() {
 		return role;
 	}
@@ -67,13 +84,12 @@ public class Player {
 		return offer;
 	}
 
-	public boolean isSold() {
-		return sold;
+	public void addContender(String contender) {
+		contenders.add(contender);
 	}
-
-	public void setSold(boolean sold) {
-		this.sold = sold;
+	
+	public List<String> getContenders() {
+		return contenders;
 	}
-
 
 }

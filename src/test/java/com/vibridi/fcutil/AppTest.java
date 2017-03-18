@@ -7,6 +7,9 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.junit.Test;
@@ -27,12 +30,7 @@ public class AppTest {
 	}
 
     public XLSXReader testLoad() throws InvalidFormatException, IOException, URISyntaxException {
-        File f = new File(AppTest.class.getResource("/ListaSvincolatiShort.xlsx").toURI());
-        if(!f.exists())
-        	throw new IOException("File doesn't exist");
-
-		XLSXReader reader = new XLSXReader(f);
-		reader.load();
+    	XLSXReader reader = getReader("ListaSvincolatiShort.xlsx");
 		
 		assertTrue(reader.size() == 5);
 		
@@ -89,6 +87,33 @@ public class AppTest {
         AppOptions.instance.resetDefaults();
 	}
 	
+	@Test(expected = ValidatorException.class)
+	public void testHeaderValidationExtra() throws URISyntaxException, IOException { 
+		XLSXReader reader = getReader("InvalidHeader-extravalue.xlsx");
+                
+        FCEngine engine = new FCEngine(Arrays.asList(reader));
+        engine.readOffers();
+        engine.validateOffers();
+	}
+	
+	@Test(expected = ValidatorException.class)
+	public void testHeaderValidationMistyped() throws URISyntaxException, IOException { 
+		XLSXReader r2 = getReader("InvalidHeader-mistyped.xlsx");
+                
+        FCEngine engine = new FCEngine(Arrays.asList(r2));
+        engine.readOffers();
+        engine.validateOffers();
+	}
+	
+	@Test(expected = ValidatorException.class)
+	public void testHeaderValidationNotString() throws URISyntaxException, IOException { 
+		XLSXReader r3 = getReader("InvalidHeader-notastring.xlsx");
+                
+        FCEngine engine = new FCEngine(Arrays.asList(r3));
+        engine.readOffers();
+        engine.validateOffers();
+	}
+	
 	@Test
 	public void testComputeLists() throws URISyntaxException {
 		File f1 = new File(AppTest.class.getResource("/ListaSvincolatiShort.xlsx").toURI());
@@ -103,15 +128,57 @@ public class AppTest {
         engine.readOffers();
         engine.computeLists();
         
-        List<XLSXWriter> writers = engine.getWriters();
-        for(XLSXWriter w : writers) {
-        	System.out.println(w.getOwner());
-        	System.out.println("Assigned players: ");
-        	for(Player p : w.getWonPlayers()) {
-        		System.out.println("\t"+p.getName()+"\t"+p.getOfferer());
-        	}
-        }
+        Map<String,XLSXWriter> wmap = engine.getWriters().stream()
+        		.map(w -> {
+        			System.out.println(w.getOwner());
+                	for(Player p : w.getWonPlayers()) {
+                		System.out.println("\t"+p.getName()+"\t"+p.getOffer()+"\t"+p.getOfferer());
+                		if(w.getOwner().equals("GiocatoriContesi.xlsx")) {
+                			for(String cont : p.getContenders())
+                				System.out.println("\t\t"+cont);
+                		}
+                			
+                	}
+                	System.out.println();
+        			return w; })
+        		.collect(Collectors.toMap(XLSXWriter::getOwner, Function.identity()));
+
+        XLSXWriter ls1 = wmap.get("ListaSvincolatiShort.xlsx");
+        XLSXWriter ls2 = wmap.get("ListaSvincolatiShort2.xlsx");
+        XLSXWriter ls3 = wmap.get("ListaSvincolatiShort3.xlsx");
+        XLSXWriter na = wmap.get("NonAssegnati.xlsx");
+        XLSXWriter gc = wmap.get("GiocatoriContesi.xlsx");
         
+        
+        assertTrue(ls1 != null);
+        assertTrue(ls1.getWonPlayers().size() == 1);
+        assertTrue(ls1.getWonPlayers().get(0).getName().equals("MARSON"));
+        
+        assertTrue(ls2!= null);
+        assertTrue(ls2.getWonPlayers().size() == 1);
+        assertTrue(ls2.getWonPlayers().get(0).getName().equals("RADU I"));
+        
+        assertTrue(ls3 != null);
+        assertTrue(ls3.getWonPlayers().size() == 1);
+        assertTrue(ls3.getWonPlayers().get(0).getName().equals("FESTA"));
+        
+        assertTrue(na != null);
+        assertTrue(na.getWonPlayers().size() == 1);
+        assertTrue(na.getWonPlayers().get(0).getName().equals("GOLLINI"));
+        
+        assertTrue(gc != null);
+        assertTrue(gc.getWonPlayers().size() == 1);
+        assertTrue(gc.getWonPlayers().get(0).getName().equals("PERISAN"));
+	}
+	
+	private XLSXReader getReader(String fileName) throws URISyntaxException, IOException {
+		File f = new File(AppTest.class.getResource("/" + fileName).toURI());
+        if(!f.exists())
+        	throw new IOException("File doesn't exist");
+
+		XLSXReader reader = new XLSXReader(f);
+		reader.load();
+		return reader;
 	}
 	
 }
