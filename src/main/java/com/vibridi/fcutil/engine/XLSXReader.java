@@ -1,6 +1,7 @@
 package com.vibridi.fcutil.engine;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -28,30 +29,30 @@ public class XLSXReader {
 	
 	private final File xlsx;
 	private final Set<String> head;
-	
-	private XSSFWorkbook xwb;
 	private Map<String,Integer> fieldIndices; 
 	private int headRow;
-	
 	private Map<String,Player> players;
-	private Object[] array;
+	private List<String> duplicates;
 
 	public XLSXReader(File xlsx) {
 		this.xlsx = xlsx;
 		this.head = new HashSet<String>(Arrays.asList(AppOptions.instance.getHeaders()));
 		this.fieldIndices = new HashMap<String,Integer>();
 		this.headRow = -1;
+		this.players = new HashMap<String,Player>();
+		this.duplicates = new ArrayList<String>();
+		
 	}
 	
 	public void load() {
 		try {
-			xwb = new XSSFWorkbook(OPCPackage.open(xlsx));
+			XSSFWorkbook xwb = new XSSFWorkbook(OPCPackage.open(xlsx));
 			XSSFSheet sheet = xwb.getSheetAt(0);
 
 			players = Stream.generate(sheet.iterator()::next).limit(sheet.getLastRowNum())
 					.filter(this::isPlayer)
 					.map(this::toPlayer)
-					.collect(Collectors.toMap(Player::getName, Function.identity(), (o,n) -> n, LinkedHashMap::new));
+					.collect(Collectors.toMap(Player::getName, Function.identity(), this::merge, LinkedHashMap::new));
 
 			xwb.close();
 		} catch(Throwable e) {
@@ -76,13 +77,15 @@ public class XLSXReader {
 	}
 	
 	public Player getPlayer(int index) {
-		if(array == null)
-			array = players.values().toArray();
-		return (Player) array[index];
+		return (Player) players.values().toArray()[index];
 	}
 	
 	public Map<String,Player> getPlayersMap() {
 		return players;
+	}
+	
+	public List<String> getDuplicates() {
+		return duplicates;
 	}
 	
 	public long countOffers() {
@@ -99,6 +102,15 @@ public class XLSXReader {
 	
 	public boolean didFindTableHead() {
 		return headRow != -1;
+	}
+	
+	public boolean hasDuplicates() {
+		return duplicates.size() > 0;
+	}
+	
+	private Player merge(Player o, Player n) {
+		duplicates.add(o.getName());
+		return n;
 	}
 	
 	private boolean isPlayer(Row row) {
@@ -164,7 +176,7 @@ public class XLSXReader {
 		case BOOLEAN:
 			return cell.getBooleanCellValue() ? 1.0 : 0.0;
 		case FORMULA:
-			FormulaEvaluator fe = xwb.getCreationHelper().createFormulaEvaluator();
+			FormulaEvaluator fe = cell.getSheet().getWorkbook().getCreationHelper().createFormulaEvaluator();
 			return fe.evaluate(cell).getNumberValue();
 		case NUMERIC:
 			return cell.getNumericCellValue();

@@ -5,7 +5,6 @@ import com.vibridi.fcutil.engine.XLSXReader;
 public class OfferCountValidator extends Validator<XLSXReader> {
 
 	private long required;
-	private long actual;
 	
 	public OfferCountValidator(long required) {
 		this.required = required;
@@ -19,8 +18,8 @@ public class OfferCountValidator extends Validator<XLSXReader> {
 	@Override
 	public String getMessage(XLSXReader target) {
 		return "Il file " + target.getFileName() +
-				" contiene " + (actual < required ? "meno" : "più") + 
-				" offerte del consentito (" + required + ")" ;
+				" contiene " + (target.countOffers() < required ? "meno" : "più") + 
+				" offerte (" + target.countOffers() + ") di quanto stabilito (" + required + ")" ;
 	}
 
 }

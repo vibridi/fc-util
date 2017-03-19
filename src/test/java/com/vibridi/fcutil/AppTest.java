@@ -6,7 +6,6 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.Arrays;
-import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -71,8 +70,8 @@ public class AppTest {
 	@Test(expected = ValidatorException.class)
 	public void testValidationFail() {
         FCEngine engine = new FCEngine(Arrays.asList(reader));
-        engine.readOffers();
-        engine.validateOffers();
+        engine.readOffers(null,null);
+        engine.validateOffers(null,null);
 	}
 	
 	@Test
@@ -81,8 +80,8 @@ public class AppTest {
         AppOptions.instance.setRoundBudget(7.0);
                 
         FCEngine engine = new FCEngine(Arrays.asList(reader));
-        engine.readOffers();
-        engine.validateOffers();
+        engine.readOffers(null,null);
+        engine.validateOffers(null,null);
         
         AppOptions.instance.resetDefaults();
 	}
@@ -92,8 +91,8 @@ public class AppTest {
 		XLSXReader reader = getReader("InvalidHeader-extravalue.xlsx");
                 
         FCEngine engine = new FCEngine(Arrays.asList(reader));
-        engine.readOffers();
-        engine.validateOffers();
+        engine.readOffers(null,null);
+        engine.validateOffers(null,null);
 	}
 	
 	@Test(expected = ValidatorException.class)
@@ -101,8 +100,8 @@ public class AppTest {
 		XLSXReader r2 = getReader("InvalidHeader-mistyped.xlsx");
                 
         FCEngine engine = new FCEngine(Arrays.asList(r2));
-        engine.readOffers();
-        engine.validateOffers();
+        engine.readOffers(null,null);
+        engine.validateOffers(null,null);
 	}
 	
 	@Test(expected = ValidatorException.class)
@@ -110,8 +109,8 @@ public class AppTest {
 		XLSXReader r3 = getReader("InvalidHeader-notastring.xlsx");
                 
         FCEngine engine = new FCEngine(Arrays.asList(r3));
-        engine.readOffers();
-        engine.validateOffers();
+        engine.readOffers(null,null);
+        engine.validateOffers(null,null);
 	}
 	
 	@Test
@@ -125,7 +124,7 @@ public class AppTest {
 		XLSXReader r3 = new XLSXReader(f3);
 		
 		FCEngine engine = new FCEngine(Arrays.asList(r1,r2,r3));
-        engine.readOffers();
+        engine.readOffers(null,null);
         engine.computeLists();
         
         Map<String,XLSXWriter> wmap = engine.getWriters().stream()

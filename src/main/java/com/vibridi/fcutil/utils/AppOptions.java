@@ -7,6 +7,7 @@ public enum AppOptions {
 	private long offerCount;
 	private boolean usingDefaultTableHeaders;
 	private String[] headers;
+	private long threadWaitMillis;
 	
 	private AppOptions() {
 		resetDefaults();
@@ -17,6 +18,7 @@ public enum AppOptions {
 		roundBudget = AppContext.instance.getDouble("default.budget");
 		offerCount = AppContext.instance.getLong("default.offers");
 		headers = AppContext.instance.getString("default.headers").split(",");
+		threadWaitMillis = AppContext.instance.getLong("fake.thread.wait.millis");
 	}
 
 	public double getRoundBudget() {
@@ -49,6 +51,14 @@ public enum AppOptions {
 
 	public void setHeaders(String[] headers) {
 		this.headers = headers;
+	}
+
+	public long getThreadWaitMillis() {
+		return threadWaitMillis;
+	}
+
+	public void setThreadWaitMillis(long threadWaitMillis) {
+		this.threadWaitMillis = threadWaitMillis;
 	}
 
 }

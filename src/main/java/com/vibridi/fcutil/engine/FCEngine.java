@@ -7,9 +7,16 @@ import java.util.Map.Entry;
 import java.util.stream.Collectors;
 
 import com.vibridi.fcutil.api.IFCEngine;
+import com.vibridi.fcutil.api.ReadErrorCallback;
+import com.vibridi.fcutil.api.ReadSuccessCallback;
+import com.vibridi.fcutil.api.ValidationErrorCallback;
+import com.vibridi.fcutil.api.ValidationSuccessCallback;
+import com.vibridi.fcutil.exception.ValidatorException;
+import com.vibridi.fcutil.exception.XLSXLoadException;
 import com.vibridi.fcutil.model.Player;
 import com.vibridi.fcutil.utils.AppOptions;
 import com.vibridi.fcutil.validator.BudgetValidator;
+import com.vibridi.fcutil.validator.DuplicateNamesValidator;
 import com.vibridi.fcutil.validator.OfferCountValidator;
 import com.vibridi.fcutil.validator.TableHeaderValidator;
 import com.vibridi.fcutil.validator.ValidatorChain;
@@ -25,18 +32,45 @@ public class FCEngine implements IFCEngine {
 		
 		chain = new ValidatorChain<XLSXReader>();
 		chain.addValidator(new TableHeaderValidator());
+		chain.addValidator(new DuplicateNamesValidator());
 		chain.addValidator(new OfferCountValidator(AppOptions.instance.getOfferCount()));
 		chain.addValidator(new BudgetValidator(AppOptions.instance.getRoundBudget()));
 	}
 
 	@Override
-	public void readOffers() {
-		readers.forEach(XLSXReader::load);
+	public void readOffers(ReadSuccessCallback successCallback, ReadErrorCallback errorCallback) {
+		for(int i = 0; i < readers.size(); i++) {
+			try {
+				readers.get(i).load();
+				if(successCallback != null)
+					successCallback.onSuccess(i);
+				Thread.sleep(AppOptions.instance.getThreadWaitMillis());
+			} catch(XLSXLoadException | InterruptedException e) {
+				if(errorCallback != null)
+					errorCallback.onError(i,e);
+				throw new IllegalStateException(e);
+			}
+		}
 	}
 
 	@Override
-	public void validateOffers() {
-		readers.forEach(chain::validate);
+	public void validateOffers(ValidationSuccessCallback successCallback, ValidationErrorCallback errorCallback) {
+		for(int i = 0; i < readers.size(); i++) {
+			try {
+				chain.validate(readers.get(i));
+				if(successCallback != null)
+					successCallback.onSuccess(i);
+				Thread.sleep(AppOptions.instance.getThreadWaitMillis());
+			} catch(ValidatorException e) {
+				if(errorCallback != null)
+					errorCallback.onError(i,e);
+				throw e;
+			} catch(InterruptedException e) {
+				if(errorCallback != null)
+					errorCallback.onError(i,e);
+				throw new IllegalStateException(e);
+			}
+		}	
 	}
 
 	@Override
