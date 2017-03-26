@@ -43,7 +43,8 @@
                                         <RowConstraints maxHeight="40.0" minHeight="40.0" prefHeight="40.0" vgrow="SOMETIMES" />
                                         <RowConstraints maxHeight="250.0" minHeight="155.0" prefHeight="181.0" vgrow="SOMETIMES" />
                                         <RowConstraints maxHeight="40.0" minHeight="10.0" prefHeight="40.0" vgrow="SOMETIMES" />
-                                          <RowConstraints maxHeight="201.0" minHeight="10.0" prefHeight="104.0" vgrow="SOMETIMES" />
+                                          <RowConstraints maxHeight="201.0" minHeight="10.0" prefHeight="81.0" vgrow="SOMETIMES" />
+                                          <RowConstraints maxHeight="30.0" minHeight="30.0" prefHeight="30.0" vgrow="NEVER" />
                                       </rowConstraints>
                                        <children>
                                           <TableView fx:id="table" prefHeight="200.0" prefWidth="200.0" GridPane.columnSpan="2" GridPane.rowIndex="1">
@@ -59,11 +60,16 @@
                                           </TableView>
                                           <ButtonBar nodeOrientation="RIGHT_TO_LEFT" prefHeight="40.0" prefWidth="200.0" GridPane.columnSpan="2" GridPane.rowIndex="2">
                                             <buttons>
-                                                <Button mnemonicParsing="false" text="Esporta..." />
+                                                <Button fx:id="exportButton" mnemonicParsing="false" onAction="#exportLists" text="Esporta..." />
                                               <Button maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#computeLists" prefHeight="27.0" prefWidth="115.0" text="Calcola" />
                                             </buttons>
                                           </ButtonBar>
                                         <Button maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#chooseSources" prefHeight="27.0" prefWidth="115.0" text="Carica Liste..." />
+                                          <Label fx:id="progressLabel" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="Label" GridPane.columnSpan="2" GridPane.rowIndex="4">
+                                             <padding>
+                                                <Insets left="5.0" right="5.0" />
+                                             </padding>
+                                          </Label>
                                        </children>
                                        <padding>
                                           <Insets left="10.0" right="10.0" top="20.0" />
@@ -94,7 +100,7 @@
                                                 <Font size="14.0" />
                                              </font>
                                           </Label>
-                                          <TextField fx:id="columnNamesField" prefHeight="27.0" prefWidth="324.0" promptText="Colonna1,Colonna2,Colonna3,..." GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.valignment="CENTER" GridPane.vgrow="NEVER" />
+                                          <TextField fx:id="columnNamesField" editable="false" prefHeight="27.0" prefWidth="324.0" promptText="Colonna1,Colonna2,Colonna3,..." GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.valignment="CENTER" GridPane.vgrow="NEVER" />
                                           <Label alignment="CENTER" text="Inserisci i nomi delle colonne separati da virgole. Devi rispettare eventuali lettere maiuscole e minuscole." wrapText="true" GridPane.columnIndex="1" GridPane.rowIndex="1" GridPane.valignment="TOP">
                                              <font>
                                                 <Font size="12.0" />

@@ -15,6 +15,12 @@ public class AppMessages {
 	public static String READING_FILES;
 	public static String VALIDATING_LISTS;
 	
+	public static String READ_SUCCESS;
+	public static String COMPUTE_SUCCESS;
+	public static String WRITE_SUCCESS;
+	
+	public static String COMPUTE_FAIL;
+	
 	static {		
 		FILE_LOAD_ERROR_HEADER = "Ecco l'hai rotto!";
 		FILE_LOAD_ERROR_BODY = "Sembra che questo file non sia stato caricato correttamente."
@@ -31,6 +37,12 @@ public class AppMessages {
 		
 		READING_FILES = "Sto leggendo i file...";
 		VALIDATING_LISTS = "Sto validando le liste...";
+		
+		READ_SUCCESS = "Caricamento file completato";
+		COMPUTE_SUCCESS = "Calcolo liste completato";
+		WRITE_SUCCESS = "Salvataggio file completato";
+		
+		COMPUTE_FAIL = "Errore durante il calcolo delle liste";
 	}
 	
 

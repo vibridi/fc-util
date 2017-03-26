@@ -5,7 +5,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import com.vibridi.fcutil.concurrent.UITask;
+import com.vibridi.fcutil.concurrent.ComputeTask;
+import com.vibridi.fcutil.concurrent.ReadTask;
 import com.vibridi.fcutil.engine.FCEngine;
 import com.vibridi.fcutil.engine.XLSXReader;
 import com.vibridi.fcutil.model.SourceFile;
@@ -15,7 +16,7 @@ import com.vibridi.fxmlutils.FXMLUtils;
 import com.vibridi.fxmlutils.controller.BaseController;
 
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -51,6 +52,8 @@ public class MainViewController extends BaseController {
 	@FXML private TableColumn<SourceFile,Number> slotsCol;
 	@FXML private TableColumn<SourceFile,Number> budgetCol;
 	@FXML private TableColumn<SourceFile,String> statusCol;
+	@FXML private Button exportButton;
+	@FXML private Label progressLabel;
 	
 	private void initializeListsTab() {
 		nameCol.setCellValueFactory(cell -> cell.getValue().fileNameProperty());
@@ -58,6 +61,8 @@ public class MainViewController extends BaseController {
 		budgetCol.setCellValueFactory(cell -> cell.getValue().budegtProperty());
 		statusCol.setCellValueFactory(cell -> cell.getValue().statusProperty());
 		statusCol.setCellFactory(callback -> { return new StatusTableCell(); });
+		exportButton.setDisable(true);
+		progressLabel.setText("");
 	}
 	
 	@FXML
@@ -75,7 +80,12 @@ public class MainViewController extends BaseController {
 					.map(XLSXReader::new)
 					.collect(Collectors.toList()));
 		
-		new Thread(new UITask(this,engine)).start();
+		ReadTask task = new ReadTask(this,engine);
+		task.setOnSucceeded(event -> {
+			exportButton.setDisable(true);
+			//progressLabel.setText(AppMessages.READ_SUCCESS);
+		});
+		new Thread(task).start();
 	}
 	
 	@FXML
@@ -96,8 +106,16 @@ public class MainViewController extends BaseController {
 			return;
 		}
 		
-		engine.computeLists();
-		// TODO enable export button 
+
+		ComputeTask task = new ComputeTask(engine);
+		task.setOnSucceeded(event -> {
+			exportButton.setDisable(false);
+			progressLabel.setText(AppMessages.COMPUTE_SUCCESS);
+		});
+		task.setOnFailed(event -> {
+			FXMLUtils.errorAlert(AppMessages.COMPUTE_FAIL, task.getException()).showAndWait();
+		});
+		new Thread(task).start();
 	}
 	
 	@FXML
@@ -108,8 +126,11 @@ public class MainViewController extends BaseController {
 		}
 		
 		File dir = FXMLUtils.chooseDirectory(stage);
-		// TODO
+		if(dir == null || !dir.exists())
+			return;
 		
+		engine.writeLists(dir);
+		progressLabel.setText(AppMessages.WRITE_SUCCESS);
 	}
 	
 	/* **************************

@@ -15,7 +15,7 @@ public class Main extends Application {
 	@Override
 	public void start(Stage primaryStage) throws Exception {
 		FXMLUtils.newView(this.getClass(), "view/mainview.fxml")
-			.makeStage("Campionato Vaticano " + AppContext.versionNumber)
+			.makeStage("Campionato Vaticano " + AppContext.VERSION_NUMBER)
 			.build()
 			.show();
 	}

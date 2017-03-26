@@ -1,12 +1,15 @@
 package com.vibridi.fcutil.engine;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map.Entry;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 import com.vibridi.fcutil.api.IFCEngine;
+import com.vibridi.fcutil.api.ProgressCallback;
 import com.vibridi.fcutil.api.ReadErrorCallback;
 import com.vibridi.fcutil.api.ReadSuccessCallback;
 import com.vibridi.fcutil.api.ValidationErrorCallback;
@@ -14,6 +17,7 @@ import com.vibridi.fcutil.api.ValidationSuccessCallback;
 import com.vibridi.fcutil.exception.ValidatorException;
 import com.vibridi.fcutil.exception.XLSXLoadException;
 import com.vibridi.fcutil.model.Player;
+import com.vibridi.fcutil.utils.AppContext;
 import com.vibridi.fcutil.utils.AppOptions;
 import com.vibridi.fcutil.validator.BudgetValidator;
 import com.vibridi.fcutil.validator.DuplicateNamesValidator;
@@ -74,7 +78,7 @@ public class FCEngine implements IFCEngine {
 	}
 
 	@Override
-	public void computeLists() {
+	public void computeLists() {	
 		writers = 
 		readers.stream()
 			.map(reader -> reader.getPlayersMap())	// <name,Player>
@@ -86,32 +90,35 @@ public class FCEngine implements IFCEngine {
 				return o1;
 			}))
 			.entrySet().stream()
-			.map(entry -> { return new XLSXWriter(entry.getKey(), entry.getValue()); })
-			.collect(Collectors.toList());
+			.map(entry -> new XLSXWriter(entry.getKey(), entry.getValue()))
+			.collect(Collectors.toList());		
 	}
 	
 	public List<XLSXWriter> getWriters() {
 		return writers;
 	}
-
-	@Override
-	public void generateUnassignedPlayersList() {
-		// TODO Auto-generated method stub
-	}
 	
 	@Override
-	public void generateContendedPlayersList() {
-		// TODO
+	public void writeLists(final File targetDirectory) {
+		for(XLSXWriter w : writers) {
+			w.prepareWorkbook();
+			w.writeWorkbook(targetDirectory);
+		}
+		
+		
+		// generate normal lists
+		// generate unassigned
+		// generate contended
 	}
 	
 	private Player assignPlayer(Player p1, Player p2) {
 		if(p1.getOffer() == p2.getOffer()) {	// contended player
 			if(p1.getOffer() == 0.0) {			// unassigned
-				p1.setOfferer("NonAssegnati.xlsx");
+				p1.setOfferer(AppContext.NOT_ASSIGNED);
 				return p1;
 			}
 			
-			p1.setOfferer("GiocatoriContesi.xlsx");
+			p1.setOfferer(AppContext.CONTENDED);
 			p1.addContender(p2.getOfferer());
 			return p1;
 		}
@@ -123,4 +130,5 @@ public class FCEngine implements IFCEngine {
 		List<T> list = new ArrayList<T>(Arrays.asList(elements));
 		return list;
 	}
+	
 }

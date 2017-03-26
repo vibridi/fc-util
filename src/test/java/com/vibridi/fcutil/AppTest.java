@@ -130,7 +130,7 @@ public class AppTest {
         Map<String,XLSXWriter> wmap = engine.getWriters().stream()
         		.map(w -> {
         			System.out.println(w.getOwner());
-                	for(Player p : w.getWonPlayers()) {
+                	for(Player p : w.getPlayers()) {
                 		System.out.println("\t"+p.getName()+"\t"+p.getOffer()+"\t"+p.getOfferer());
                 		if(w.getOwner().equals("GiocatoriContesi.xlsx")) {
                 			for(String cont : p.getContenders())
@@ -150,24 +150,24 @@ public class AppTest {
         
         
         assertTrue(ls1 != null);
-        assertTrue(ls1.getWonPlayers().size() == 1);
-        assertTrue(ls1.getWonPlayers().get(0).getName().equals("MARSON"));
+        assertTrue(ls1.getPlayers().size() == 1);
+        assertTrue(ls1.getPlayers().get(0).getName().equals("MARSON"));
         
         assertTrue(ls2!= null);
-        assertTrue(ls2.getWonPlayers().size() == 1);
-        assertTrue(ls2.getWonPlayers().get(0).getName().equals("RADU I"));
+        assertTrue(ls2.getPlayers().size() == 1);
+        assertTrue(ls2.getPlayers().get(0).getName().equals("RADU I"));
         
         assertTrue(ls3 != null);
-        assertTrue(ls3.getWonPlayers().size() == 1);
-        assertTrue(ls3.getWonPlayers().get(0).getName().equals("FESTA"));
+        assertTrue(ls3.getPlayers().size() == 1);
+        assertTrue(ls3.getPlayers().get(0).getName().equals("FESTA"));
         
         assertTrue(na != null);
-        assertTrue(na.getWonPlayers().size() == 1);
-        assertTrue(na.getWonPlayers().get(0).getName().equals("GOLLINI"));
+        assertTrue(na.getPlayers().size() == 1);
+        assertTrue(na.getPlayers().get(0).getName().equals("GOLLINI"));
         
         assertTrue(gc != null);
-        assertTrue(gc.getWonPlayers().size() == 1);
-        assertTrue(gc.getWonPlayers().get(0).getName().equals("PERISAN"));
+        assertTrue(gc.getPlayers().size() == 1);
+        assertTrue(gc.getPlayers().get(0).getName().equals("PERISAN"));
 	}
 	
 	private XLSXReader getReader(String fileName) throws URISyntaxException, IOException {

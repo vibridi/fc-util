@@ -7,12 +7,12 @@ import com.vibridi.fcutil.utils.AppMessages;
 
 import javafx.concurrent.Task;
 
-public class UITask extends Task<Void> {
+public class ReadTask extends Task<Void> {
 	
 	private MainViewController ctrl;
 	private FCEngine engine;
 	
-	public UITask(MainViewController ctrl, FCEngine engine) {
+	public ReadTask(MainViewController ctrl, FCEngine engine) {
 		this.ctrl = ctrl;
 		this.engine = engine;
 	}

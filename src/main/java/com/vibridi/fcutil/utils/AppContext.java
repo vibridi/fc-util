@@ -9,7 +9,10 @@ import com.vibridi.fcutil.Main;
 public enum AppContext {
 	instance;
 	
-	public static final String versionNumber = Main.class.getPackage().getImplementationVersion();
+	public static final String VERSION_NUMBER = Main.class.getPackage().getImplementationVersion();
+	public static final String NOT_ASSIGNED = "NonAssegnati.xlsx";
+	public static final String CONTENDED = "GiocatoriContesi.xlsx";
+	
 	private Properties props;
 	
 	private AppContext() {
