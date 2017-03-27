@@ -16,11 +16,6 @@ public class StatusTableCell extends TableCell<SourceFile,String> {
 			return;
 		}
 		switch(item) {
-		case AppMessages.STATUS_OK:
-		case AppMessages.STATUS_VALID:
-			setTextFill(Color.GREEN);
-			break;
-			
 		case AppMessages.STATUS_ERR:
 		case AppMessages.STATUS_INVALID:
 			setTextFill(Color.DARKRED);

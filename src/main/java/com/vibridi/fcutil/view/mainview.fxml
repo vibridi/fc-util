@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ButtonBar?>
 <?import javafx.scene.control.Label?>
@@ -16,7 +17,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane prefHeight="423.0" prefWidth="541.0" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.vibridi.fcutil.controller.MainViewController">
+<BorderPane prefHeight="423.0" prefWidth="541.0" styleClass="fcutils-background" stylesheets="@../css/fcstyle.css" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.vibridi.fcutil.controller.MainViewController">
    <center>
       <AnchorPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
          <children>
@@ -34,20 +35,19 @@
                         <content>
                           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                                  <children>
-                                    <GridPane layoutX="128.0" layoutY="112.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                    <GridPane layoutX="128.0" layoutY="112.0" styleClass="fcutils-tab-body" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                       <columnConstraints>
                                         <ColumnConstraints hgrow="SOMETIMES" maxWidth="256.0" minWidth="10.0" prefWidth="128.0" />
                                         <ColumnConstraints hgrow="SOMETIMES" maxWidth="396.0" minWidth="10.0" prefWidth="393.0" />
                                       </columnConstraints>
                                       <rowConstraints>
+                                        <RowConstraints maxHeight="250.0" minHeight="55.0" prefHeight="181.0" vgrow="SOMETIMES" />
                                         <RowConstraints maxHeight="40.0" minHeight="40.0" prefHeight="40.0" vgrow="SOMETIMES" />
-                                        <RowConstraints maxHeight="250.0" minHeight="155.0" prefHeight="181.0" vgrow="SOMETIMES" />
-                                        <RowConstraints maxHeight="40.0" minHeight="10.0" prefHeight="40.0" vgrow="SOMETIMES" />
                                           <RowConstraints maxHeight="201.0" minHeight="10.0" prefHeight="81.0" vgrow="SOMETIMES" />
                                           <RowConstraints maxHeight="30.0" minHeight="30.0" prefHeight="30.0" vgrow="NEVER" />
                                       </rowConstraints>
                                        <children>
-                                          <TableView fx:id="table" prefHeight="200.0" prefWidth="200.0" GridPane.columnSpan="2" GridPane.rowIndex="1">
+                                          <TableView fx:id="table" prefHeight="200.0" prefWidth="200.0" GridPane.columnSpan="2">
                                             <columns>
                                               <TableColumn fx:id="nameCol" maxWidth="1.7976931348623157E308" minWidth="270.0" prefWidth="310.0" text="File" />
                                                 <TableColumn fx:id="slotsCol" maxWidth="55.0" minWidth="45.0" prefWidth="45.0" text="Rosa" />
@@ -58,14 +58,24 @@
                                                 <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
                                              </columnResizePolicy>
                                           </TableView>
-                                          <ButtonBar nodeOrientation="RIGHT_TO_LEFT" prefHeight="40.0" prefWidth="200.0" GridPane.columnSpan="2" GridPane.rowIndex="2">
+                                          <ButtonBar nodeOrientation="RIGHT_TO_LEFT" prefHeight="40.0" prefWidth="200.0" GridPane.columnSpan="2" GridPane.rowIndex="1">
                                             <buttons>
-                                                <Button fx:id="exportButton" mnemonicParsing="false" onAction="#exportLists" text="Esporta..." />
-                                              <Button maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#computeLists" prefHeight="27.0" prefWidth="115.0" text="Calcola" />
+                                                <Button fx:id="exportButton" disable="true" mnemonicParsing="false" onAction="#exportLists" prefHeight="27.0" styleClass="fcutils-button" text="Esporta...">
+                                                   <font>
+                                                      <Font name="Helvetica" size="13.0" />
+                                                   </font></Button>
+                                              <Button maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#computeLists" prefHeight="27.0" prefWidth="115.0" styleClass="fcutils-button" text="Calcola">
+                                                   <font>
+                                                      <Font name="Helvetica" size="13.0" />
+                                                   </font></Button>
+                                              <Button maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#chooseSources" prefHeight="27.0" prefWidth="115.0" styleClass="fcutils-button" text="Carica Liste...">
+                                                   <font>
+                                                      <Font name="Helvetica" size="13.0" />
+                                                   </font>
+                                                </Button>
                                             </buttons>
                                           </ButtonBar>
-                                        <Button maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#chooseSources" prefHeight="27.0" prefWidth="115.0" text="Carica Liste..." />
-                                          <Label fx:id="progressLabel" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="Label" GridPane.columnSpan="2" GridPane.rowIndex="4">
+                                          <Label fx:id="progressLabel" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="Label" GridPane.columnSpan="2" GridPane.rowIndex="3">
                                              <padding>
                                                 <Insets left="5.0" right="5.0" />
                                              </padding>
@@ -82,7 +92,7 @@
                         <content>
                           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                                  <children>
-                                    <GridPane hgap="10.0" layoutX="112.0" layoutY="125.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                    <GridPane hgap="10.0" layoutX="112.0" layoutY="125.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" styleClass="fcutils-tab-body" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                       <columnConstraints>
                                         <ColumnConstraints hgrow="SOMETIMES" maxWidth="412.0" minWidth="10.0" prefWidth="101.0" />
                                         <ColumnConstraints hgrow="SOMETIMES" maxWidth="473.0" minWidth="10.0" prefWidth="400.0" />
@@ -101,7 +111,7 @@
                                              </font>
                                           </Label>
                                           <TextField fx:id="columnNamesField" editable="false" prefHeight="27.0" prefWidth="324.0" promptText="Colonna1,Colonna2,Colonna3,..." GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.valignment="CENTER" GridPane.vgrow="NEVER" />
-                                          <Label alignment="CENTER" text="Inserisci i nomi delle colonne separati da virgole. Devi rispettare eventuali lettere maiuscole e minuscole." wrapText="true" GridPane.columnIndex="1" GridPane.rowIndex="1" GridPane.valignment="TOP">
+                                          <Label alignment="CENTER" text="I nomi delle colonne di tutte le liste giocatori devono corrispondere a questi. Fai attenzione alle lettere maiuscole e minuscole." wrapText="true" GridPane.columnIndex="1" GridPane.rowIndex="1" GridPane.valignment="TOP">
                                              <font>
                                                 <Font size="12.0" />
                                              </font>
@@ -128,6 +138,9 @@
                         </content>
                       </Tab>
                     </tabs>
+                     <cursor>
+                        <Cursor fx:constant="DEFAULT" />
+                     </cursor>
                   </TabPane>
                </children>
             </GridPane>

@@ -17,11 +17,11 @@ public enum AppContext {
 	
 	private AppContext() {
 		props = new Properties();
-		InputStream in = Main.class.getResourceAsStream("context.properties");
+		InputStream in = Main.class.getResourceAsStream("/context.properties");
 		try {
 			props.load(in);
-		} catch(IOException e) {
-			throw new RuntimeException("Cannot load properties");
+		} catch(Throwable e) {
+			throw new RuntimeException("Cannot load properties", e);
 		}
 	}
 	
